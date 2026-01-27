@@ -1,24 +1,29 @@
-name: Generate Config File
+name: WikiFur Persons Template Bot
 
 on:
   schedule:
     # 北京时间每天7点，对应UTC时间23点 (7-8=-1 => 23 UTC)
     - cron: '0 23 * * *'
-  push:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
-  generate-config:
+  update-template:
     runs-on: ubuntu-latest
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-    
-    - name: Create config.ini from environment variables
+        python-version: '3.x'
+        
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        
+    - name: Create config.ini from secrets (not committed)
       run: |
         echo "[Location]" > config.ini
         echo "; 专用工具是这样的" >> config.ini
@@ -30,19 +35,10 @@ jobs:
         echo "username=${{ secrets.WIKIFUR_USERNAME }}" >> config.ini
         echo "password=${{ secrets.WIKIFUR_PASSWORD }}" >> config.ini
         
-    - name: Configure git
+    - name: Run the bot to update template
       run: |
-        git config --global user.name 'github-actions[bot]'
-        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        
-    - name: Commit and push config.ini
+        python -m . --send --summary "自动更新人物模板 (定时任务)"
+      
+    - name: Clean up config.ini
       run: |
-        git add config.ini
-        if git diff --staged --quiet; then
-          echo "No changes to commit"
-        else
-          git commit -m "Auto-generate config.ini from secrets"
-          git push
-        fi
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        rm config.ini
