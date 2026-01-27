@@ -166,7 +166,7 @@ def generate_template(
     template = "<noinclude>\n"
     template += "== 编辑须知 ==\n"
     template += "# 兽圈是一个包容性非常强的群体，即便你不出名，你没有拿得出手的作品，'''甚至你认为你只是一个普通人'''，你都可以在这里创建属于你自己的词条。\n"
-    template += "# 但是，该模板本身不需要编辑，因为它由一个Python程序自动创建。你可以在[[gh:TimXiedada/wikifur-persons-template-bot|此处]]找到这个代码（部分代码使用Vibe Coding生成）\n"
+    template += "# 但是，该模板本身不需要编辑，因为它由一个Python程序自动创建。你可以在[[gh:TimXiedada/wikifur-persons-template-bot|此处]]找到机器人的源代码。（使用Vibe Coding方式开发了一部分模块）\n"
     template += "# 欢迎每一位毛茸茸创建属于自己的词条或修订关于自己的词条，因为'''你比任何人都要了解你自己'''。\n"
     template += "# Wikifur是一个比较专业（或者说严肃）的百科平台，请各位在编辑词条时不要使用太过主观（或随意）的语言。\n"
     template += "# Wikifur并不是一个新闻的收集仓库，除非是十分重要的事件，否则请不要加入过多的时事性内容。\n"
