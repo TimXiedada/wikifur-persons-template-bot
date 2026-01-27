@@ -37,7 +37,8 @@ jobs:
         
     - name: Run the bot to update template
       run: |
-        python -m . --send --summary "基于定时任务自动更新人物模板"
+        cd ..
+        python -m wikifur-persons-template-bot --send --summary "基于定时任务自动更新人物模板"
       
     - name: Clean up config.ini
       run: |
