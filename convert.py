@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# Copyright (c) 2026 Xie Youtian
 import pypinyin
 import logging
 from get import PageInfo
