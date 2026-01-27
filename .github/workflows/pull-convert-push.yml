@@ -17,7 +17,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.x'
+        python-version: '3.12'
         
     - name: Install dependencies
       run: |
@@ -27,7 +27,7 @@ jobs:
       run: |
         echo "[Location]" > config.ini
         echo "; 专用工具是这样的" >> config.ini
-        echo "domain=${{ secrets.WIKIFUR_DOMAIN }}" >> config.ini
+        echo "domain=zh.wikifur.com" >> config.ini
         echo "" >> config.ini
         echo "[Credential]" >> config.ini
         echo "; 该部分为敏感信息，严禁纳入版本控制！" >> config.ini
@@ -37,7 +37,7 @@ jobs:
         
     - name: Run the bot to update template
       run: |
-        python -m . --send --summary "自动更新人物模板 (定时任务)"
+        python -m . --send --summary "基于定时任务自动更新人物模板"
       
     - name: Clean up config.ini
       run: |
