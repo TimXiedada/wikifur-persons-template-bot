@@ -1,0 +1,10 @@
+[Location]
+; 专用工具是这样的
+; This is what dedicated tools do.
+domain=zh.wikifur.com
+
+[Credential]
+; 该部分为敏感信息，严禁纳入版本控制！
+; This section is confidential, DO NOT commit in VCS!
+username=your_username
+password=password_here
