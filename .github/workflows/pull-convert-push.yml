@@ -4,6 +4,9 @@ on:
   schedule:
     # 北京时间每天7点，对应UTC时间23点 (7-8=-1 => 23 UTC)
     - cron: '0 23 * * *'
+  push:
+    branches:
+      - master
   workflow_dispatch:
 
 jobs:
@@ -37,8 +40,7 @@ jobs:
         
     - name: Run the bot to update template
       run: |
-        cd ..
-        python -m wikifur-persons-template-bot --send --summary "基于定时任务自动更新人物模板"
+        python __main__.py --send --summary "基于定时任务自动更新人物模板"
       
     - name: Clean up config.ini
       run: |
