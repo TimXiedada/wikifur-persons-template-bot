@@ -141,7 +141,6 @@ def get_pinyinized_page_list(unpinyinized_titles: List[PageInfo]) -> List[Pinyin
 
 def generate_template(
     pinyinized_titles: List[PinyinPageInfo],
-    grouping_scheme: list[str] = ["A·B·C·D", "E·F·G·H", "I·J·K·L", "M·N·O·P", "Q·R·S·T", "U·V·W", "X·Y·Z", "#"]
 ):
     # Group pages by first letter of pinyin
     groups = {}
@@ -161,6 +160,94 @@ def generate_template(
 
     # Sort groups by key
     sorted_groups = dict(sorted(groups.items()))
+
+    # Log statistics for each letter
+    logging.info("各字母组成员数量统计:")
+    for letter in sorted(groups.keys()):
+        count = len(groups[letter])
+        logging.info(f"  {letter}: {count} 人")
+
+    # Total count
+    total_count = sum(len(group) for group in groups.values())
+    logging.info(f"总计: {total_count} 人")
+
+    # Calculate balanced grouping scheme
+    def calculate_balanced_grouping(groups, max_group_size=40):
+        """
+        计算最均衡的分组方案，保持字母顺序不变
+        """
+        sorted_letters = sorted([l for l in groups.keys() if l != '#'])
+        if '#' in groups:
+            sorted_letters.append('#')
+        counts = [len(groups[letter]) for letter in sorted_letters]
+        n = len(counts)
+
+        if n == 0:
+            return []
+
+        # 估算最优组数 - 现在基于max_group_size计算最少需要的组数
+        min_groups_needed = max(1, (total_count + max_group_size - 1) // max_group_size)  # 向上取整
+        estimated_groups = min_groups_needed
+
+        # 尝试不同的组数，选择方差最小的
+        best_result = None
+        best_variance = float('inf')
+
+        for num_groups in range(max(1, estimated_groups - 2), min(len(sorted_letters) + 1, estimated_groups + 3)):
+            # 使用贪心算法进行分组 - 现在严格遵守max_group_size限制
+            groups_split = []
+            current_group = []
+            current_sum = 0
+
+            for i, (letter, count) in enumerate(zip(sorted_letters, counts)):
+                # 如果当前组为空，直接添加
+                if len(current_group) == 0:
+                    current_group = [letter]
+                    current_sum = count
+                # 检查添加当前字母是否会超过最大组大小
+                elif current_sum + count <= max_group_size:
+                    # 添加到当前组
+                    current_group.append(letter)
+                    current_sum += count
+                else:
+                    # 当前组已达到最大大小，开始新组
+                    groups_split.append(current_group)
+                    current_group = [letter]
+                    current_sum = count
+
+            # 添加最后一组
+            if current_group:
+                groups_split.append(current_group)
+
+            # 计算当前分组的方差
+            group_sizes = []
+            for group in groups_split:
+                size = sum(len(groups[letter]) for letter in group)
+                group_sizes.append(size)
+
+            # 检查是否所有组都符合最大大小限制
+            if all(size <= max_group_size for size in group_sizes):
+                mean_size = total_count / len(group_sizes)
+                variance = sum((size - mean_size) ** 2 for size in group_sizes) / len(group_sizes)
+
+                if variance < best_variance:
+                    best_variance = variance
+                    best_result = ['·'.join(group) for group in groups_split]
+
+        return best_result if best_result else [letter for letter in sorted_letters]
+
+    # Generate recommended grouping scheme
+    recommended_grouping = calculate_balanced_grouping(groups)
+    logging.info(f"推荐的分组方案: {recommended_grouping}")
+
+    # Calculate and log size of each recommended group
+    for i, group in enumerate(recommended_grouping):
+        letters = group.split('·')
+        size = sum(len(groups[letter]) for letter in letters)
+        logging.info(f"  推荐组{i+1} ({group}): {size}人")
+
+    # Use the recommended grouping scheme instead of default one
+    grouping_scheme = recommended_grouping
 
     # Create template string with noinclude header
     template = "<noinclude>\n"
