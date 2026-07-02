@@ -301,7 +301,7 @@ def generate_template(
 
     template += "}}\n\n"
     template += "}}\n\n"
-    template += "<noinclude>\n\n"
-    template += "[[分類:相關內容目錄|{{PAGENAME}}]]</noinclude>\n"
+    template += "<noinclude>[[分类:导航模板]]</noinclude>"
+
 
     return template
