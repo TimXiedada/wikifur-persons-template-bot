@@ -259,7 +259,7 @@ def generate_template(
     template += "# WikiFur是一个比较专业（或者说严肃）的百科平台，请各位在编辑词条时不要使用太过主观（或随意）的语言。\n"
     template += "# WikiFur并不是一个新闻的收集仓库，除非是十分重要的事件，否则请不要加入过多的时事性内容。\n"
     # template += "# 因为精力有限，以上内容可能无法包含全部毛茸茸，需要大家修订补充。\n"
-    template += "# 基于现代中文出版物的做法，该模板中，逝世的人物将会用 {{Departed|示亡号}} 标记。\n\n"
+    template += "# 基于现代中文出版物的做法，该模板中，[[模板:人物（已过世）|逝世的人物]]将会用 {{Departed|示亡号}} 标记。\n\n"
     template += "== 模板正文 == \n"
     template += "</noinclude>\n"
     template += "{{Navbox\n"
